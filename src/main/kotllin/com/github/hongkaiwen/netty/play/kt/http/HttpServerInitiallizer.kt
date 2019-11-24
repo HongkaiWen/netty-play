@@ -11,11 +11,10 @@ import io.netty.handler.codec.http.HttpServerCodec
 class HttpServerInitiallizer : ChannelInitializer<Channel>() {
 
     override fun initChannel(ch: Channel?) {
-        if (ch == null) return
-        var pipeline = ch.pipeline()
-        pipeline.addLast(HttpServerCodec())
-        pipeline.addLast(HttpObjectAggregator(1024*1024*64))
-        pipeline.addLast(HttpRequestHandler())
+        var pipeline = ch?.pipeline()
+        pipeline?.addLast(HttpServerCodec())
+        pipeline?.addLast(HttpObjectAggregator(1024*1024*64))
+        pipeline?.addLast(HttpRequestHandler())
     }
 
 }

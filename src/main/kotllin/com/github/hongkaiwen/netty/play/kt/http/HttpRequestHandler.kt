@@ -11,12 +11,9 @@ import io.netty.util.CharsetUtil
 class HttpRequestHandler : SimpleChannelInboundHandler<FullHttpRequest>() {
 
     override fun channelRead0(ctx: ChannelHandlerContext?, msg: FullHttpRequest?) {
-        if (ctx == null) return
-        if (msg == null) return
+        if(is100ContinueExpected(msg)) ctx?.write(DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE))
 
-        if(is100ContinueExpected(msg)) ctx.write(DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE))
-
-        var uri = msg.uri()
+        var uri = msg?.uri()
 
         var responsse = DefaultFullHttpResponse(
                 HttpVersion.HTTP_1_1,
@@ -25,7 +22,7 @@ class HttpRequestHandler : SimpleChannelInboundHandler<FullHttpRequest>() {
 
         responsse.headers().add(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8")
 
-        ctx.writeAndFlush(responsse).addListener(ChannelFutureListener.CLOSE)
+        ctx?.writeAndFlush(responsse)?.addListener(ChannelFutureListener.CLOSE)
     }
 
 }
